@@ -13,37 +13,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.ejemplo1.ui.theme.Ejemplo1Theme
+import androidx.compose.foundation.layout.Row
+import androidx.compose.ui.text.font.FontWeight
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent {
+        this.setContent {
             Ejemplo1Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                GreetingPreview()
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        fontSize = 100.sp
 
-    )
+@Composable
+fun Content(mensaje1: String, mensaje2: String) {
+    Row{
+        Text(
+            mensaje1,
+            fontSize = 30.sp
+        )
+        Text(
+            mensaje2,
+            lineHeight = 30.sp
+        )
+        Text("Yisus", fontWeight = FontWeight.Bold, fontSize = 30.sp, lineHeight = 30.sp)
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    Ejemplo1Theme {
-        Greeting("Android")
-    }
+    Content("Hola","asas")
 }
