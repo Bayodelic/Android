@@ -13,12 +13,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.ejemplo1.ui.theme.Ejemplo1Theme
 
 class MainActivity : ComponentActivity() {
@@ -39,27 +39,42 @@ fun GreetingPreview() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
             .background(Color.LightGray),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SimpleImage()
+        // Imagen en la parte superior con tamaño adecuado
+        SimpleImage(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(250.dp) // Ajusta la altura según sea necesario
+        )
+
         Spacer(modifier = Modifier.height(16.dp))
-        TextFieldWithInputType()
-        Spacer(modifier = Modifier.height(16.dp))
-        TextFieldWithInputType2()
-        Spacer(modifier = Modifier.height(16.dp))
-        SimpleButton()
+
+        // Campos de texto y botón
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TextFieldWithInputType()
+            Spacer(modifier = Modifier.height(16.dp))
+            TextFieldWithInputType2()
+            Spacer(modifier = Modifier.height(16.dp))
+            SimpleButton()
+        }
     }
 }
 
 @Composable
-fun SimpleImage() {
+fun SimpleImage(modifier: Modifier = Modifier) {
     Image(
         painter = painterResource(id = R.drawable.carro),
-        contentDescription = "Un auto bien bonito",
-        modifier = Modifier.fillMaxWidth()
+        contentDescription = "un carro chidote",
+        modifier = modifier,
+        contentScale = ContentScale.Crop  // Ajusta la imagen para cubrir sin deformarse
     )
 }
 
@@ -68,9 +83,12 @@ fun TextFieldWithInputType() {
     var text by remember { mutableStateOf(TextFieldValue("")) }
     TextField(
         value = text,
-        onValueChange = { text = it },
         label = { Text(text = "Valor 1") },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        onValueChange = { it ->
+            text = it
+        }
+
     )
 }
 
@@ -79,17 +97,19 @@ fun TextFieldWithInputType2() {
     var text by remember { mutableStateOf(TextFieldValue("")) }
     TextField(
         value = text,
-        onValueChange = { text = it },
         label = { Text(text = "Valor 2") },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        onValueChange = { it ->
+            text = it
+        }
     )
 }
-
 @Composable
 fun SimpleButton() {
     Button(onClick = {
-        // Acción al presionar el botón
-    }) {
+        //your onclick code here
+    }
+    ) {
         Text(text = "Calcular")
     }
 }
