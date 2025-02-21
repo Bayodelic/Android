@@ -35,19 +35,22 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    var numero1 by remember { mutableStateOf(TextFieldValue("")) }
-    var numero2 by remember { mutableStateOf(TextFieldValue("")) }
-    var resultado by remember { mutableStateOf(0) }
+    var precio by remember { mutableStateOf(TextFieldValue("")) }
+    var descuento by remember { mutableStateOf(TextFieldValue("")) }
+    var precioFinal by remember { mutableStateOf(0.0) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.LightGray),
+            .background(Color.LightGray)
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Imagen decorativa
         Box(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -61,45 +64,45 @@ fun GreetingPreview() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Campo de texto 1
+        // Campo para ingresar el precio del producto
         TextField(
-            value = numero1,
-            onValueChange = { numero1 = it },
-            label = { Text(text = "Valor 1") },
+            value = precio,
+            onValueChange = { precio = it },
+            label = { Text(text = "Precio del producto") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth(0.8f)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Campo de texto 2
+        // Campo para ingresar el porcentaje de descuento
         TextField(
-            value = numero2,
-            onValueChange = { numero2 = it },
-            label = { Text(text = "Valor 2") },
+            value = descuento,
+            onValueChange = { descuento = it },
+            label = { Text(text = "Descuento (%)") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth(0.8f)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Botón para calcular
+        // Botón para calcular el precio final con descuento
         Button(
             onClick = {
-                val num1 = numero1.text.toIntOrNull() ?: 0
-                val num2 = numero2.text.toIntOrNull() ?: 0
-                resultado = num1 + num2
+                val precioProducto = precio.text.toDoubleOrNull() ?: 0.0
+                val porcentajeDescuento = descuento.text.toDoubleOrNull() ?: 0.0
+                precioFinal = precioProducto - (precioProducto * (porcentajeDescuento / 100))
             },
             modifier = Modifier.padding(8.dp)
         ) {
-            Text(text = "Calcular")
+            Text(text = "Calcular descuento")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Mostrar resultado
+        // Mostrar precio final
         Text(
-            text = "Resultado: $resultado",
+            text = "Precio final: $${"%.2f".format(precioFinal)}",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold
         )
