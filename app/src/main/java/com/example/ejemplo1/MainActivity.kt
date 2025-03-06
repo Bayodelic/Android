@@ -9,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -55,21 +56,28 @@ val recetas = listOf(
     Receta("Ensalada César", "Una ensalada fresca y deliciosa con aderezo césar...",
         listOf("Lechuga", "Pollo", "Pan Tostado", "Queso Parmesano"), R.drawable.ensalada)
 )
+
 @Composable
 fun ListaRecetas(navController: NavController, recetas: List<Receta>) {
-    LazyColumn {
+    LazyColumn(modifier = Modifier.padding(16.dp)) {
         items(recetas) { receta ->
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
                     .clickable { navController.navigate("detalle/${receta.nombre}") },
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF3E0)),
+                elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
             ) {
                 Row(modifier = Modifier.padding(16.dp)) {
                     Image(painter = painterResource(receta.imagen), contentDescription = receta.nombre,
-                        modifier = Modifier.size(80.dp))
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(text = receta.nombre, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                        modifier = Modifier.size(80.dp).padding(end = 8.dp),
+                        contentScale = ContentScale.Crop)
+                    Column {
+                        Text(text = receta.nombre, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                        Text(text = receta.descripcion, fontSize = 14.sp, color = Color.Gray)
+                    }
                 }
             }
         }
@@ -80,21 +88,29 @@ fun ListaRecetas(navController: NavController, recetas: List<Receta>) {
 fun DetalleReceta(recetaNombre: String?, navController: NavController) {
     val receta = recetas.find { it.nombre == recetaNombre } ?: return
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        Button(onClick = { navController.popBackStack() }, modifier = Modifier.padding(bottom = 16.dp)) {
-            Text(text = "Regresar")
+    Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Button(
+            onClick = { navController.popBackStack() },
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00796B))
+        ) {
+            Text(text = "Regresar", color = Color.White)
         }
+        Spacer(modifier = Modifier.height(16.dp))
         Image(painter = painterResource(receta.imagen), contentDescription = receta.nombre,
-            modifier = Modifier.fillMaxWidth())
-        Text(text = receta.nombre, fontSize = 24.sp, fontWeight = FontWeight.Bold)
+            modifier = Modifier.fillMaxWidth().height(200.dp),
+            contentScale = ContentScale.Crop)
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = receta.nombre, fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color(0xFF00796B))
         Text(text = receta.descripcion, fontSize = 16.sp, modifier = Modifier.padding(vertical = 8.dp))
-        Text(text = "Ingredientes:", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-        receta.ingredientes.forEach {
-            Text(text = "- $it", fontSize = 16.sp)
+        Text(text = "Ingredientes:", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color(0xFFE64A19))
+        Column(modifier = Modifier.padding(top = 8.dp)) {
+            receta.ingredientes.forEach {
+                Text(text = "- $it", fontSize = 16.sp, color = Color.DarkGray)
+            }
         }
     }
 }
-
 
 @Composable
 fun AppNavegacion() {
@@ -107,7 +123,6 @@ fun AppNavegacion() {
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
